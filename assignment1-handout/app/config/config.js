@@ -42,7 +42,8 @@ var config = convict({
     name: {
       doc: 'Database name',
       format: String,
-      default: 'default'
+      default: 'default',
+      env: 'MON_NAME'
     },
     db_url: {
       format: '*',
