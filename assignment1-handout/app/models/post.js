@@ -1,4 +1,5 @@
-require('dotenv').config();
+require('dotenv').config('../config/config.js');
+const config = require('../config/config');
 const AWS = require('aws-sdk');
 
 /*
