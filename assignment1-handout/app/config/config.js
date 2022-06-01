@@ -32,6 +32,14 @@ var config = convict({
     env: 'REDIS_HOST',
     arg: 'redishost'
   },
+  dynamo:{
+    name:{
+      doc: 'Database name',
+      format: String,
+      default: 'default',
+      env: 'DYNAMO_NAME'
+    }
+  },
   db: {
     host: {
       doc: 'Database host name/IP',
