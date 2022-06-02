@@ -38,6 +38,18 @@ var config = convict({
       format: String,
       default: 'default',
       env: 'DYNAMO_NAME'
+    },
+    key:{
+      doc: 'AWS key',
+      format: String,
+      default: 'default',
+      env: 'ACCESS_KEY'
+    },
+    secret:{
+      doc: 'AWS secret key',
+      format: String,
+      default: 'default',
+      env: 'SECRET_ACCESS_KEY'
     }
   },
   db: {

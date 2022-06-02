@@ -2,6 +2,11 @@ require('dotenv').config('../config/config.js');
 const config = require('../config/config');
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
+AWS.config.update({
+    accessKeyId: config.get('dynamo.key'),
+    secretAccessKey: config.get('dynamo.secret'),
+    "region": 'us-west-2'
+});
 var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 /*
