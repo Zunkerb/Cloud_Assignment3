@@ -11,10 +11,22 @@ var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 
 
+
 const homeStartingContent =
 	'The home pages lists all the blogs from all the users.';
 
-const composePost = (req, res) => {
+const getPostId = async () => {
+	const tableCoutParams = {
+		TableName: config.get('dynamo.name'),
+		Select: "COUNT",
+	};
+	let count = await ddb.scan(tableCoutParams).promise();
+	console.log(count.ScannedCount);
+	return count.ScannedCount;
+	
+}
+
+const composePost = async (req, res) => {
 	/* const post = new Post({
     username: req.user.username,
 		title: req.body.postTitle,
@@ -23,15 +35,20 @@ const composePost = (req, res) => {
 
 	post.save();
 	res.redirect('/post'); */
+
+	let postCount = await getPostId();
+
+
+
 	var params = {
 		TableName: config.get('dynamo.name'),
 		Item: {
-		  'postId' : {S: '000'},
+		  'postId' : {S: postCount.toString()},
 		  'username' : {S: req.user.username},
 		  'title' : {S: req.body.postTitle}, 
 		  'content' : {S: req.body.postBody} 
 		}
-	  };
+	};
 	
 	ddb.putItem(params, function(err, data) {
 	  if (err) {
