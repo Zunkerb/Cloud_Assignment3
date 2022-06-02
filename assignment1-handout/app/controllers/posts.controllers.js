@@ -38,8 +38,6 @@ const composePost = async (req, res) => {
 
 	let postCount = await getPostId();
 
-
-
 	var params = {
 		TableName: config.get('dynamo.name'),
 		Item: {
@@ -57,7 +55,10 @@ const composePost = async (req, res) => {
 		console.log("Success", data);
 	  }
 	});
+
+	res.redirect('/post');
 };
+
 
 const displayAllPosts = (req, res) => {
 	/* Post.find({}, function(err, posts) {
@@ -66,6 +67,18 @@ const displayAllPosts = (req, res) => {
 			posts: posts
 		});
 	}); */
+
+	const params = {
+        TableName: config.get('dynamo.name'),
+    };
+
+	ddb.scan(params,function(err, posts) {
+		res.render('home', {
+			startingContent: homeStartingContent,
+			posts: posts
+		});
+	  });
+
 };
 async function displayPost (req, res)  {
 	const requestedPostId = req.params.postId;
