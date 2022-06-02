@@ -1,6 +1,8 @@
 require('dotenv').config('../config/config.js');
 const config = require('../config/config');
 const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-west-2'});
+var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 /*
 const mongoose = require("mongoose");
@@ -18,9 +20,6 @@ const mongoose = require("mongoose");
 });
 
 module.exports = mongoose.model("Post", postSchema); */
-
-
-var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 var params = {
 	TableName: config.get('dynamo.name'),
