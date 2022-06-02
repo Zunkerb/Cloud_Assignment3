@@ -28,9 +28,9 @@ module.exports = mongoose.model("Post", postSchema); */
 var params = {
 	TableName: config.get('dynamo.name'),
 	Item: {
-	  'POST_ID' : {N: '001'}, //env var
-	  'title' : {S: ''}, //figure out how to take input
-	  'content' : {S: ''} // figure out how to take input
+	  'postId' : {S: '000'}, //env var
+	  'title' : {S: 'title'}, //figure out how to take input
+	  'content' : {S: 'content'} // figure out how to take input
 	}
   };
 
