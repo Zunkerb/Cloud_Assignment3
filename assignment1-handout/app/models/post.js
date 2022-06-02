@@ -34,10 +34,10 @@ var params = {
 	}
   };
 
-ddb.putItem(params, function(err, data) {
+/* ddb.putItem(params, function(err, data) {
   if (err) {
     console.log("Error", err);
   } else {
     console.log("Success", data);
   }
-});
+}); */
