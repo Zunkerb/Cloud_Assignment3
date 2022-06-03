@@ -114,7 +114,6 @@ async function displayPost(req, res) {
 		if (err) {
 			console.log("Error:", err);
 		} else {
-			console.log("Success", post.Item);
 			res.render('post', {
 				title: JSON.stringify(post.Item.title).substring(6,JSON.stringify(post.Item.title).length-2),
 				content: JSON.stringify(post.Item.content).substring(6,JSON.stringify(post.Item.content).length-2)
