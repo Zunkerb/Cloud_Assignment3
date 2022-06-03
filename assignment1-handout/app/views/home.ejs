@@ -6,9 +6,9 @@
 
   <%  posts.forEach(function(post){ %>
 
-    <h1><%=post.title%></h1>
+    <h1><%=JSON.stringify(post.title).substring(6,JSON.stringify(post.title).length-2)%></h1>
     <p>
-    <%=post.content.substring(0, 100) + " ..."%>
+    <%=JSON.stringify(post.content).substring(6,JSON.stringify(post.content).length-2).substring(0,100) + " ..."%>
     <a href="/post/posts/<%=post._id%>">Read More</a>
     </p>
 
