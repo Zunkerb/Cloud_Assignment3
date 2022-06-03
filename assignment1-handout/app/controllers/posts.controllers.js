@@ -86,8 +86,6 @@ const displayAllPosts = async (req, res) => {
 
 	let posts = await scanTable();
 
-	console.log(posts);
-
 	res.render('home', {
 		startingContent: homeStartingContent,
 		posts: posts
@@ -104,12 +102,11 @@ async function displayPost(req, res) {
 	}); */
 
 	const requestedPostId = req.params.postId;
-	console.log("id", requestedPostId);
 
 	var params = {
 		TableName: config.get('dynamo.name'),
 		Key: {
-			'postId': requestedPostId
+			'postId': {S: requestedPostId}
 		}
 	};
 
