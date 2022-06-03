@@ -3,11 +3,11 @@ require('dotenv').config('../config/config.js');
 const config = require('../config/config');
 const AWS = require('aws-sdk');
 AWS.config.update({
-    accessKeyId: config.get('dynamo.key'),
-    secretAccessKey: config.get('dynamo.secret'),
-    "region": 'us-west-2'
+	accessKeyId: config.get('dynamo.key'),
+	secretAccessKey: config.get('dynamo.secret'),
+	"region": 'us-west-2'
 });
-var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+var ddb = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
 
 
@@ -23,12 +23,12 @@ const getPostId = async () => {
 	let count = await ddb.scan(tableCoutParams).promise();
 	console.log(count.ScannedCount);
 	return count.ScannedCount;
-	
+
 }
 
 const composePost = async (req, res) => {
 	/* const post = new Post({
-    username: req.user.username,
+	username: req.user.username,
 		title: req.body.postTitle,
 		content: req.body.postBody
 	});
@@ -41,19 +41,19 @@ const composePost = async (req, res) => {
 	var params = {
 		TableName: config.get('dynamo.name'),
 		Item: {
-		  'postId' : {S: postCount.toString()},
-		  'username' : {S: req.user.username},
-		  'title' : {S: req.body.postTitle}, 
-		  'content' : {S: req.body.postBody} 
+			'postId': { S: postCount.toString() },
+			'username': { S: req.user.username },
+			'title': { S: req.body.postTitle },
+			'content': { S: req.body.postBody }
 		}
 	};
-	
-	ddb.putItem(params, function(err, data) {
-	  if (err) {
-		console.log("Error", err);
-	  } else {
-		console.log("Success", data);
-	  }
+
+	ddb.putItem(params, function (err, data) {
+		if (err) {
+			console.log("Error", err);
+		} else {
+			console.log("Success", data);
+		}
 	});
 
 	res.redirect('/post');
@@ -61,53 +61,69 @@ const composePost = async (req, res) => {
 
 
 const scanTable = async () => {
-    const params = {
-        TableName: config.get('dynamo.name'),
-    };
+	const params = {
+		TableName: config.get('dynamo.name'),
+	};
 
-    const scanResults = [];
-    var items;
-    do{
-        items =  await ddb.scan(params).promise();
-        items.Items.forEach((item) => scanResults.push(item));
-        params.ExclusiveStartKey  = items.LastEvaluatedKey;
-    }while(typeof items.LastEvaluatedKey !== "undefined");
+	const scanResults = [];
+	var items;
+	do {
+		items = await ddb.scan(params).promise();
+		items.Items.forEach((item) => scanResults.push(item));
+		params.ExclusiveStartKey = items.LastEvaluatedKey;
+	} while (typeof items.LastEvaluatedKey !== "undefined");
 
-    return scanResults;
+	return scanResults;
 };
 
 const displayAllPosts = async (req, res) => {
-    /* Post.find({}, function(err, posts) {
-        res.render('home', {
-            startingContent: homeStartingContent,
-            posts: posts
-        });
-    }); */
+	/* Post.find({}, function(err, posts) {
+		res.render('home', {
+			startingContent: homeStartingContent,
+			posts: posts
+		});
+	}); */
 
-    let posts = await scanTable();
+	let posts = await scanTable();
 
 	console.log(posts);
 
-    res.render('home', {
-        startingContent: homeStartingContent,
-        posts: posts
-    });
+	res.render('home', {
+		startingContent: homeStartingContent,
+		posts: posts
+	});
 
 };
 
-async function displayPost (req, res)  {
-	const requestedPostId = req.params.postId;
-
+async function displayPost(req, res) {
 	/* Post.findOne({ _id: requestedPostId }, function(err, post) {
 		res.render('post', {
 			title: post.title,
 			content: post.content
 		});
 	}); */
+
+	const requestedPostId = req.params.postId;
+	console.log("id", requestedPostId);
+
+	var params = {
+		TableName: config.get('dynamo.name'),
+		Key: {
+			'postId': requestedPostId
+		}
+	};
+
+	ddb.getItem(params, function (err, post) {
+		if (err) {
+			console.log("Error:", err);
+		} else {
+			console.log("Success", post.Item);
+		}
+	}); 
 };
 
 module.exports = {
 	displayAllPosts,
 	displayPost,
-    composePost
+	composePost
 };
