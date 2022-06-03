@@ -9,7 +9,7 @@
     <h1><%=JSON.stringify(post.title).substring(6,JSON.stringify(post.title).length-2)%></h1>
     <p>
     <%=JSON.stringify(post.content).substring(6,JSON.stringify(post.content).length-2).substring(0,100) + " ..."%>
-    <a href="/post/posts/<%=post._id%>">Read More</a>
+    <a href="/post/posts/<%=JSON.stringify(post.postId).substring(6, JSON.stringify(post.postId).length-2)%>">Read More</a>
     </p>
 
 
