@@ -60,26 +60,41 @@ const composePost = async (req, res) => {
 };
 
 
-const displayAllPosts = (req, res) => {
-	/* Post.find({}, function(err, posts) {
-		res.render('home', {
-			startingContent: homeStartingContent,
-			posts: posts
-		});
-	}); */
-
-	const params = {
+const scanTable = async () => {
+    const params = {
         TableName: config.get('dynamo.name'),
     };
 
-	ddb.scan(params,function(err, posts) {
-		res.render('home', {
-			startingContent: homeStartingContent,
-			posts: posts
-		});
-	  });
+    const scanResults = [];
+    var items;
+    do{
+        items =  await ddb.scan(params).promise();
+        items.Items.forEach((item) => scanResults.push(item));
+        params.ExclusiveStartKey  = items.LastEvaluatedKey;
+    }while(typeof items.LastEvaluatedKey !== "undefined");
+
+    return scanResults;
+};
+
+const displayAllPosts = async (req, res) => {
+    /* Post.find({}, function(err, posts) {
+        res.render('home', {
+            startingContent: homeStartingContent,
+            posts: posts
+        });
+    }); */
+
+    let posts = await scanTable();
+
+	console.log(posts);
+
+    res.render('home', {
+        startingContent: homeStartingContent,
+        posts: posts
+    });
 
 };
+
 async function displayPost (req, res)  {
 	const requestedPostId = req.params.postId;
 
