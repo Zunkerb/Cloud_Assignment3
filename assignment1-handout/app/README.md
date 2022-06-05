@@ -2,7 +2,7 @@
 
 1) Drew Klepfer and Ben Zunker
 
-2) ALB: A3LoadBalancer3-625178038.us-west-2.elb.amazonaws.com 
+2) ALB: https://A3LoadBalancer3-625178038.us-west-2.elb.amazonaws.com 
 
 3) The most challenging part of this assignment was deploying to ECS Fargate and getting a link through the alb that works.
     We can connect to the website through http and receive a 400 error, letting us know the http was sent to https. 
